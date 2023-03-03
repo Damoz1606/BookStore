@@ -68,7 +68,7 @@ public class AuthorController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PutMapping("/{identification}/{type}")
+    @DeleteMapping("/{identification}/{type}")
     public ResponseEntity deleteAuthor(
             @PathVariable("type") String type,
             @PathVariable("identification") String identification) {
