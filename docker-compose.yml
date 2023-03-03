@@ -1,0 +1,60 @@
+version: '3.7'
+
+services:
+  author-service:
+    build:
+      context: ./author
+    container_name: author-service
+    hostname: author
+    ports:
+      - 8082:8082
+    depends_on:
+      - postgres
+    networks:
+      - default
+
+  book-service:
+    build:
+      context: ./book
+    container_name: book-service
+    hostname: book
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    networks:
+      - default
+
+  mongo:
+    image: mongo:6.0.4-jammy
+    hostname: mongo
+    ports:
+      - 27070:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=12345
+    volumes:
+      - /book_db/data:/data/db
+    networks:
+      - default
+
+  postgres:
+    image: postgres:15.2-alpine
+    hostname: postgres
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=author
+    volumes:
+      - ./author_db/data:/var/lib/postgresql/data
+      - ./author_db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - default
+
+networks:
+  default:
+    name: kong-net
+    

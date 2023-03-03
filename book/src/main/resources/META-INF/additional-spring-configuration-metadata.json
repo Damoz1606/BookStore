@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "banquito.mongo.pwd",
+    "type": "java.lang.String",
+    "description": "A description for 'banquito.mongo.pwd'"
+  },
+  {
+    "name": "banquito.mongo.usr",
+    "type": "java.lang.String",
+    "description": "A description for 'banquito.mongo.usr'"
+  },
+  {
+    "name": "banquito.mongo.aut",
+    "type": "java.lang.String",
+    "description": "A description for 'banquito.mongo.aut'"
+  },
+  {
+    "name": "banquito.mongo.db",
+    "type": "java.lang.String",
+    "description": "A description for 'banquito.mongo.db'"
+  },
+  {
+    "name": "banquito.mongo.host",
+    "type": "java.lang.String",
+    "description": "A description for 'banquito.mongo.host'"
+  }
+]}
