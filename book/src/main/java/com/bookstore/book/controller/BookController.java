@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstore.book.controller.DTOs.RequestBook;
 import com.bookstore.book.controller.DTOs.ResponseBook;
+import com.bookstore.book.controller.DTOs.ResponseBookAuthor;
 import com.bookstore.book.controller.Mapper.BookMapper;
+import com.bookstore.book.model.Author;
 import com.bookstore.book.model.Book;
+import com.bookstore.book.service.AuthorService;
 import com.bookstore.book.service.BookService;
 
 @RestController
@@ -24,9 +27,11 @@ import com.bookstore.book.service.BookService;
 public class BookController {
 
     private final BookService _service;
+    private final AuthorService _author;
 
-    public BookController(BookService _service) {
+    public BookController(BookService _service, AuthorService _author) {
         this._service = _service;
+        this._author = _author;
     }
 
     @GetMapping
@@ -51,12 +56,15 @@ public class BookController {
     }
 
     @GetMapping("/book/{book}")
-    public ResponseEntity<ResponseBook> findBookById(
+    public ResponseEntity<ResponseBookAuthor> findBookById(
             @PathVariable("book") String id) {
         Optional<Book> book = this._service.findBookById(id);
         if (book.isPresent()) {
-            ResponseBook responseBook = BookMapper.map(book.get());
-            return ResponseEntity.ok().body(responseBook);
+            Author author = this._author.getAuthor(book.get().getAuthor());
+            if(!author.equals(null)) {
+                ResponseBookAuthor responseBook = BookMapper.map(book.get(), author);
+                return ResponseEntity.ok().body(responseBook);
+            }
         }
         return ResponseEntity.notFound().build();
     }

@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import com.bookstore.author.controller.DTOs.ResponseAuthor;
+import com.bookstore.author.controller.DTOs.ResponseAuthorSingle;
 import com.bookstore.author.controller.DTOs.RequestAuthor;
+import com.bookstore.author.controller.DTOs.RequestAuthorUpdate;
 import com.bookstore.author.controller.Mapper.AuthorMapper;
 import com.bookstore.author.model.Author;
 import com.bookstore.author.services.AuthorService;
@@ -31,48 +33,44 @@ public class AuthorController {
         if (authors.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        List<ResponseAuthor> response = authors.stream().map(data -> AuthorMapper.map(data)).toList();
+        List<ResponseAuthor> response = authors.stream().map(data -> AuthorMapper.mapResponseAuthor(data)).toList();
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/{identification}/{type}")
-    public ResponseEntity<ResponseAuthor> findAuthorById(
-            @PathVariable("type") String type,
+    @GetMapping("/{identification}")
+    public ResponseEntity<ResponseAuthorSingle> findAuthorById(
             @PathVariable("identification") String identification) {
-        Optional<Author> opt = this._service.findAuthorByPK(identification, type);
+        Optional<Author> opt = this._service.findAuthorByPK(identification);
         if (opt.isPresent()) {
-            return ResponseEntity.ok().body(AuthorMapper.map(opt.get()));
+            return ResponseEntity.ok().body(AuthorMapper.mapResponseAuthorSingle(opt.get()));
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity saveAuthor(
+    public ResponseEntity<Object> saveAuthor(
             @RequestBody RequestAuthor author) {
-        if (this._service.SaveAuthor(AuthorMapper.map(author), author.getIdentification(),
-                author.getIdentificationType())) {
+        if (this._service.SaveAuthor(AuthorMapper.mapAuthor(author), author.getIdentification())) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }
 
-    @PutMapping("/{identification}/{type}")
-    public ResponseEntity updateAuthor(
-            @PathVariable("type") String type,
+    @PutMapping("/{identification}")
+    public ResponseEntity<Object> updateAuthor(
             @PathVariable("identification") String identification,
-            @RequestBody RequestAuthor author) {
-        if (this._service.UpdateAuthor(AuthorMapper.map(author), identification, type)) {
+            @RequestBody RequestAuthorUpdate author) {
+        if (this._service.UpdateAuthor(AuthorMapper.mapAuthor(author), identification)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping("/{identification}/{type}")
-    public ResponseEntity deleteAuthor(
-            @PathVariable("type") String type,
+    @DeleteMapping("/{identification}")
+    public ResponseEntity<Object> deleteAuthor(
             @PathVariable("identification") String identification) {
-        if (this._service.DeleteAuthor(identification, type)) {
+        if (this._service.DeleteAuthor(identification)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
