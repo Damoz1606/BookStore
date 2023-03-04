@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.bookstore.author.model.Author;
-import com.bookstore.author.model.AuthorPK;
 import com.bookstore.author.repository.AuthorRepository;
 
 @Service
@@ -22,25 +21,15 @@ public class AuthorService {
         return this._repository.findAll();
     }
 
-    public Optional<Author> findAuthorByPK(String identification, String type) {
+    public Optional<Author> findAuthorByPK(String identification) {
         return this._repository
-                .findById(AuthorPK.builder().identification(identification).identificationType(type).build());
+                .findById(identification);
     }
 
-    public Optional<Author> findAuthorByPK(AuthorPK pk) {
-        return this._repository
-                .findById(pk);
-    }
-
-    public boolean SaveAuthor(Author author, String identification, String type) {
-        return this.SaveAuthor(author,
-                AuthorPK.builder().identification(identification).identificationType(type).build());
-    }
-
-    public boolean SaveAuthor(Author author, AuthorPK pk) {
-        Optional<Author> opt = this.findAuthorByPK(pk);
+    public boolean SaveAuthor(Author author, String identification) {
+        Optional<Author> opt = this.findAuthorByPK(identification);
         if (!opt.isPresent()) {
-            author.setPk(pk);
+            author.setIdentification(identification);
             this._repository.save(author);
             return true;
         } else {
@@ -48,14 +37,10 @@ public class AuthorService {
         }
     }
 
-    public boolean UpdateAuthor(Author author, String identification, String type) {
-        return this.UpdateAuthor(author,
-                AuthorPK.builder().identification(identification).identificationType(type).build());
-    }
-
-    public boolean UpdateAuthor(Author author, AuthorPK pk) {
-        Optional<Author> opt = this.findAuthorByPK(pk);
+    public boolean UpdateAuthor(Author author, String identification) {
+        Optional<Author> opt = this.findAuthorByPK(identification);
         if (opt.isPresent()) {
+            author.setIdentification(identification);
             this._repository.save(author);
             return true;
         } else {
@@ -63,12 +48,8 @@ public class AuthorService {
         }
     }
 
-    public boolean DeleteAuthor(String identification, String type) {
-        return this.DeleteAuthor(AuthorPK.builder().identification(identification).identificationType(type).build());
-    }
-
-    public boolean DeleteAuthor(AuthorPK pk) {
-        Optional<Author> opt = this.findAuthorByPK(pk);
+    public boolean DeleteAuthor(String identification) {
+        Optional<Author> opt = this.findAuthorByPK(identification);
         if (opt.isPresent()) {
             this._repository.delete(opt.get());
             return true;

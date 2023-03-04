@@ -3,8 +3,8 @@ package com.bookstore.author.model;
 import java.io.Serializable;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,9 +18,10 @@ import lombok.EqualsAndHashCode.Include;
 @NoArgsConstructor
 public class Author implements Serializable {
 
-    @EmbeddedId
+    @Id
     @Include
-    private AuthorPK pk;
+    @Column(name = "IDENTIFICATION", length = 15, nullable = false)
+    private String identification;
 
     @Column(name = "NAME", length = 32, nullable = false)
     private String name;
