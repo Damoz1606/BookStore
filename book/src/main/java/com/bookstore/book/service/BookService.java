@@ -32,7 +32,7 @@ public class BookService {
     public boolean saveBook(Book book) {
         List<Book> books = this.findBooksByAuthor(book.getAuthor());
         List<Book> sameTitleBooks = books.stream().filter(data -> data.getTitle().equals(book.getTitle())).toList();
-        if (books.isEmpty() && sameTitleBooks.isEmpty()) {
+        if (books.isEmpty() || sameTitleBooks.isEmpty()) {
             this._repository.save(book);
             return true;
         }
