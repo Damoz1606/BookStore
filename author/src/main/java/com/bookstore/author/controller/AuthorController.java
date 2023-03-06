@@ -51,7 +51,8 @@ public class AuthorController {
     @PostMapping
     public ResponseEntity<Object> saveAuthor(
             @RequestBody RequestAuthor author) {
-        if (this._service.SaveAuthor(AuthorMapper.mapAuthor(author), author.getIdentification())) {
+        boolean flag = this._service.SaveAuthor(AuthorMapper.mapAuthor(author), author.getIdentification());
+        if (flag) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();

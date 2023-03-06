@@ -23,7 +23,7 @@ public class AuthorMapper {
                 .name(author.getName())
                 .lastname(author.getLastname())
                 .fullname(author.getName() + " " + author.getLastname())
-                .career(author.getCareer().get())
+                .career(author.getCareer())
                 .build();
     }
 
@@ -33,7 +33,7 @@ public class AuthorMapper {
                 .name(author.getName())
                 .lastname(author.getLastname())
                 .fullname(author.getName() + " " + author.getLastname())
-                .career(author.getCareer().get())
+                .career(author.getCareer())
                 .build();
     }
     

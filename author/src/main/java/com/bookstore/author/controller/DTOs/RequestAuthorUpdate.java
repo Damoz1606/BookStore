@@ -1,7 +1,6 @@
 package com.bookstore.author.controller.DTOs;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +15,6 @@ public class RequestAuthorUpdate implements Serializable {
 
     private String name;
     private String lastname;
-    private Optional<String> career;
+    private String career;
 }
 
