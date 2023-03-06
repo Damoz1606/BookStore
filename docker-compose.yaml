@@ -5,48 +5,43 @@ networks:
     name: kong-net
 
 services:
-  # kong:
-  #   image: kong:3.1.1-alpine
-  #   hostname: kong
-  #   container_name: kong
-  #   environment:
-  #     KONG_DATABASE: "off"
-  #     KONG_PROXY_ACCESS_LOG: /dev/stdout
-  #     KONG_ADMIN_ACCESS_LOG: /dev/stdout
-  #     KONG_PROXY_ERROR_LOG: /dev/stdout
-  #     KONG_ADMIN_ERROR_LOG: /dev/stdout
-  #     KONG_ADMIN_LISTEN: "0.0.0.0:8001, 0.0.0.0:8444 ssl"
-  #     KONG_DECLARATIVE_CONFIG: "/opt/kong/kong.yaml"
-  #   command: "kong start"
-  #   depends_on:
-  #     - author-service
-  #     - book-service
-  #   ports:
-  #     - "8000:8000"
-  #     - "8443:8443"
-  #     - "8001:8001"
-  #     - "8444:8444"
-  #   volumes:
-  #     - ./kong:/opt/kong
+  kong:
+    image: kong:3.1.1-alpine
+    hostname: kong
+    container_name: kong
+    environment:
+      KONG_DATABASE: "off"
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stdout
+      KONG_ADMIN_ERROR_LOG: /dev/stdout
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001, 0.0.0.0:8444 ssl"
+      KONG_DECLARATIVE_CONFIG: "/opt/kong/kong.yaml"
+    command: "kong start"
+    depends_on:
+      - author-service
+      - book-service
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "8001:8001"
+      - "8444:8444"
+    volumes:
+      - ./kong:/opt/kong
 
   author-service:
     build:
       context: ./author
     container_name: author-service
     hostname: author
-    ports:
-      - 8082:8082
     depends_on:
       - postgres
     
-
   book-service:
     build:
       context: ./book
     container_name: book-service
     hostname: book
-    ports:
-      - 8081:8081
     depends_on:
       - mongo
 
